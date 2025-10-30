@@ -3,100 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生日快乐！王同学</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>生日快乐！小王同学</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f9c5d1 0%, #c2a4f3 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        
+        /* 花瓣动画 */
+        .petal {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 182, 193, 0.6);
+            border-radius: 50% 0 50% 0;
+            animation: fall linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 主卡片样式 */
+        .card-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .birthday-card {
+            background: linear-gradient(145deg, #ffffff, #fff5f8);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .birthday-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+        }
+        
+        .card-header {
+            margin-bottom: 25px;
+        }
+        
+        .birthday-cake {
+            font-size: 4em;
+            margin-bottom: 10px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            color: #e91e63;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: #9c27b0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .main-message {
+            font-size: 1.2em;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        /* 祝福语区域 - 默认展开 */
+        .detailed-blessings {
+            display: block; /* 修改：默认展开 */
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .blessing-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 250, 250, 0.8);
+            border-radius: 10px;
+            border-left: 4px solid #f8bbd9;
+            transition: transform 0.3s;
+        }
+        
+        .blessing-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .blessing-item .icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .blessing-item p {
+            color: #666;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        /* 许愿按钮区域 */
+        .wish-section {
+            margin: 30px 0;
+            position: relative; /* 修改：为许愿效果提供定位上下文 */
+        }
+        
+        .wish-btn {
+            background: linear-gradient(45deg, #e91e63, #9c27b0);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        
+        .wish-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+        }
+        
+        /* 修改：使用绝对定位避免页面变长 */
+        .wish-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 页脚 */
+        .card-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .signature {
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .signature span {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .decoration {
+            font-size: 1.5em;
+            letter-spacing: 10px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .birthday-card {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .birthday-cake {
+                font-size: 3em;
+            }
+            
+            .blessing-item {
+                padding: 10px;
+            }
+        }
+        
+        /* 许愿星星动画 */
+        @keyframes wishFloat {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .wish-star {
+            position: absolute;
+            font-size: 2em;
+            animation: wishFloat 1.5s ease-out forwards;
+        }
+    </style>
 </head>
 <body>
-    <!-- 背景花瓣 -->
-    <div class="petals-container"></div>
+    <!-- 花瓣背景 -->
+    <div id="petals-container"></div>
     
     <!-- 主卡片 -->
     <div class="card-container">
         <div class="birthday-card">
             <div class="card-header">
                 <div class="birthday-cake">🎂</div>
-                <h1>王同学生日快乐！</h1>
-                <div class="subtitle">一份特别的数字祝福</div>
+                <h1>生日快乐 小王同学！</h1>
+                <div class="subtitle">愿这份数字贺卡能为你带来一点惊喜和快乐</div>
             </div>
             
             <div class="card-content">
-                <div class="message-section">
-                    <p class="main-message">虽然相识不久，但很開心能为你庆祝这个特别的日子</p>
-                    
-                    <div class="blessing-toggle">
-                        <button class="toggle-btn" onclick="toggleBlessings()">
-                            <span>展开祝福 ✨</span>
-                        </button>
+                <p class="main-message">虽相识不久，但很开心能为你庆祝这个特别的日子</p>
+                
+                <!-- 祝福语区域 - 默认展开 -->
+                <div class="detailed-blessings">
+                    <div class="blessing-item">
+                        <div class="icon">🌞</div>
+                        <p>愿你的新一岁，每一天都灿烂，每个清晨都迎来阳光，每个夜晚都相伴美梦。</p>
                     </div>
-                    
-                    <div class="detailed-blessings" id="detailedBlessings">
-                        <div class="blessing-item">
-                            <div class="icon">🌞</div>
-                            <p>愿你的新一岁充满阳光般的温暖，每个清晨都带着希望开始</p>
-                        </div>
-                        <div class="blessing-item">
-                            <div class="icon">🎨</div>
-                            <p>愿生活如调色盘般丰富多彩，每一天都有新的惊喜和美好</p>
-                        </div>
-                        <div class="blessing-item">
-                            <div class="icon">🌟</div>
-                            <p>愿所有的梦想都能闪闪发光，所有的努力都有回报</p>
-                        </div>
-                        <div class="blessing-item">
-                            <div class="icon">📚</div>
-                            <p>愿学业进步，知识如繁星点亮前行的道路</p>
-                        </div>
+                    <div class="blessing-item">
+                        <div class="icon">🎨</div>
+                        <p>愿你的生活如彩虹般多彩，有热爱的事物，有向往的远方，也有身边的小确幸。</p>
+                    </div>
+                    <div class="blessing-item">
+                        <div class="icon">🌟</div>
+                        <p>愿身体健康，活力满满，每一天都充满能量和好心情</p>
+                    </div>
+                    <div class="blessing-item">
+                        <div class="icon">📚</div>
+                        <p>愿所有的梦想都能闪闪发光，所有的努力都有回报</p>
                     </div>
                 </div>
                 
-                <div class="interactive-section">
-                    <div class="birthday-wish">
-                        <button class="wish-btn" onclick="makeWish()">
-                            <span class="btn-text">点此许愿 🌠</span>
-                        </button>
-                        <div class="wish-effect" id="wishEffect"></div>
-                    </div>
+                <!-- 许愿区域 -->
+                <div class="wish-section">
+                    <button class="wish-btn" onclick="makeWish()">
+                        <span class="btn-text">点此许愿 🌠</span>
+                    </button>
+                    <div class="wish-effect" id="wishEffect"></div>
                 </div>
             </div>
             
             <div class="card-footer">
-                <p class="signature">祝你生日快乐！<br><span>—— 来自[你的名字或昵称]的祝福</span></p>
+                <p class="signature">祝你生日快乐！<br><span>—— 来自小李的祝福</span></p>
                 <div class="decoration">🎉 🎁 🎈</div>
             </div>
         </div>
     </div>
 
-    <!-- 统计查看面板 (默认隐藏，你可以通过密码查看) -->
-    <div class="stats-panel" id="statsPanel">
-        <div class="stats-content">
-            <h3>访问统计</h3>
-            <div class="stats-data">
-                <div class="stat-item">
-                    <span class="stat-label">首次访问:</span>
-                    <span id="firstVisit">-</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">最后访问:</span>
-                    <span id="lastVisit">-</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">总访问次数:</span>
-                    <span id="totalVisits">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">祝福展开次数:</span>
-                    <span id="blessingOpens">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">许愿次数:</span>
-                    <span id="wishCount">0</span>
-                </div>
-            </div>
-            <button class="close-stats" onclick="hideStats()">关闭</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            createPetals(15);
+            
+            // 修改：默认展开祝福，不需要额外代码
+            // 因为CSS中已经设置display: block
+        });
+        
+        // 创建花瓣效果
+        function createPetals(count) {
+            const container = document.getElementById('petals-container');
+            for (let i = 0; i < count; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                petal.style.animationDelay = Math.random() * 5 + 's';
+                petal.style.opacity = Math.random() * 0.5 + 0.3;
+                petal.style.width = petal.style.height = (Math.random() * 15 + 10) + 'px';
+                container.appendChild(petal);
+            }
+        }
+        
+        // 许愿功能 - 修改版，避免页面变长
+        function makeWish() {
+            const effect = document.getElementById('wishEffect');
+            const btn = document.querySelector('.wish-btn .btn-text');
+            
+            // 修改按钮文本
+            btn.textContent = '愿望已发送 🌟';
+            
+            // 清空之前的效果
+            effect.innerHTML = '';
+            
+            // 创建多个星星效果
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const star = document.createElement('div');
+                    star.className = 'wish-star';
+                    star.textContent = '✨';
+                    
+                    // 随机位置（在按钮周围）
+                    const xPos = (Math.random() - 0.5) * 200;
+                    star.style.left = `calc(50% + ${xPos}px)`;
+                    
+                    effect.appendChild(star);
+                    
+                    // 动画结束后移除元素
+                    setTimeout(() => {
+                        if (star.parentNode === effect) {
+                            effect.removeChild(star);
+                        }
+                    }, 1500);
+                }, i * 200);
+            }
+            
+            // 3秒后恢复按钮文本
+            setTimeout(() => {
+                btn.textContent = '愿美好如约而至 🎉';
+            }, 3000);
+        }
+        
+        // 记录访问数据（简化版）
+        function recordVisit(action = 'page_load') {
+            // 在实际使用中，这里应该发送到你的Vercel API
+            console.log(`记录访问: ${action} - ${new Date().toLocaleString()}`);
+        }
+        
+        // 页面卸载时记录离开时间
+        window.addEventListener('beforeunload', function() {
+            recordVisit('page_unload');
+        });
+    </script>
 </body>
 </html>
