@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐！</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f9c5d1, #c2a4f3);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 飘落的花瓣 */
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50% 0 50% 0;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 贺卡容器 */
+        .card-container {
+            position: relative;
+            z-index: 2;
+            perspective: 1000px;
+        }
+        
+        .card {
+            width: 350px;
+            height: 500px;
+            background: linear-gradient(145deg, #ffffff, #fff5f8);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+        
+        .card-inner {
+            padding: 40px;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        h1 {
+            color: #e91e63;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .name {
+            color: #9c27b0;
+            font-size: 2.2em;
+            font-weight: bold;
+            margin: 15px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        
+        .heart {
+            color: #ff6b6b;
+            font-size: 2em;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin: 10px 0;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .surprise {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #e91e63, #9c27b0);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        .hidden-message {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            animation: fadeIn 1s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 飘落的花瓣 -->
+    <div id="petals-container"></div>
+    
+    <div class="card-container">
+        <div class="card">
+            <div class="card-inner">
+                <h1>🎂 生日快乐！</h1>
+                <div class="name">给最特别的你</div>
+                <div class="heart">❤️</div>
+                <div class="message">
+                    愿你的每一天都充满阳光和欢笑，<br>
+                    愿所有的美好都如期而至。<br>
+                    生日快乐，永远美丽！
+                </div>
+                <div class="surprise">
+                    <button onclick="showSurprise()">点击有惊喜</button>
+                    <div id="hiddenMessage" class="hidden-message">
+                        你是我生命中最美的惊喜！🎁
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 创建飘落的花瓣
+        function createPetals() {
+            const container = document.getElementById('petals-container');
+            const petalCount = 15;
+            
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                petal.style.animationDelay = Math.random() * 5 + 's';
+                petal.style.opacity = Math.random() * 0.5 + 0.3;
+                container.appendChild(petal);
+            }
+        }
+        
+        // 显示惊喜消息
+        function showSurprise() {
+            const message = document.getElementById('hiddenMessage');
+            message.style.display = 'block';
+            
+            // 添加一些庆祝效果
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    createFloatingHeart();
+                }, i * 200);
+            }
+        }
+        
+        // 创建漂浮的爱心
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.style.position = 'fixed';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            heart.style.zIndex = 1000;
+            heart.style.animation = `floatUp ${Math.random() * 2 + 1}s ease-in forwards`;
+            
+            document.body.appendChild(heart);
+            
+            // 添加浮动动画
+            const style = document.createElement('style');
+            if (!document.querySelector('#floatAnimation')) {
+                style.id = 'floatAnimation';
+                style.textContent = `
+                    @keyframes floatUp {
+                        to {
+                            transform: translateY(-100vh) rotate(360deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // 移除元素
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+        
+        // 页面加载时创建花瓣
+        window.onload = createPetals;
+        
+        // 修改这里为你想要祝福的人的名字
+        function personalizeCard() {
+            // 修改名字 - 将"小仙女"替换成她的名字或昵称
+            document.querySelector('.name').textContent = "亲爱的小仙女";
+            
+            // 可以在这里添加更多个性化内容
+        }
+        
+        // 调用个性化函数
+        personalizeCard();
+    </script>
+</body>
+</html>
